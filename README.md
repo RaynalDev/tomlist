@@ -1,6 +1,6 @@
 # README.md — Architecture & Démarrage
 
-> Ce README est prêt à être committé à la racine du repo. Il décrit l’architecture cible (Nx monorepo), les commandes de démarrage, l’organisation des dossiers et les contrats d’API du MVP.
+> Ce README décrit l’architecture cible (Nx monorepo), les commandes de démarrage, l’organisation des dossiers et les contrats d’API du MVP.
 
 ## Sommaire
 1. Vision & portée (MVP)
