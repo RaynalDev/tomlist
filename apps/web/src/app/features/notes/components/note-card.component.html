@@ -1,0 +1,33 @@
+<article class="note" [class.note--list]="note.type === 'list'">
+  <header class="note__header">
+    <h3>{{ note.title }}</h3>
+  </header>
+
+  <div *ngIf="note.type === 'note'" class="note__content">
+    {{ note.content || 'Contenu vide pour le moment.' }}
+  </div>
+
+  <div *ngIf="note.type === 'list'" class="note__list">
+    <ul>
+      <li *ngFor="let item of note.items">
+        <label>
+          <input
+            type="checkbox"
+            [checked]="item.checked"
+            (change)="onToggle(item, $event)"
+          />
+          <span [class.checked]="item.checked">{{ item.label }}</span>
+        </label>
+      </li>
+    </ul>
+    <form (ngSubmit)="addListItem()" class="note__new-item">
+      <input
+        type="text"
+        placeholder="Nouvel item"
+        [(ngModel)]="newItem"
+        name="newItem"
+      />
+      <button type="submit">Ajouter</button>
+    </form>
+  </div>
+</article>

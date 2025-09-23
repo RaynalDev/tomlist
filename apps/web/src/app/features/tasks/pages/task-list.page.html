@@ -1,0 +1,67 @@
+<section class="tasks">
+  <header class="tasks__header">
+    <h1>Tâches</h1>
+    <form class="tasks__form" (ngSubmit)="onSubmit()">
+      <input
+        type="text"
+        placeholder="Ajouter une tâche rapide"
+        [(ngModel)]="newTask"
+        name="taskTitle"
+        required
+      />
+      <button type="submit">Ajouter</button>
+    </form>
+  </header>
+
+  <div class="tasks__loading" *ngIf="isLoading(); else list">
+    Chargement…
+  </div>
+
+  <ng-template #list>
+    <section *ngIf="hasPinned()" class="tasks__section">
+      <h2>Tâches épinglées</h2>
+      <app-task-item
+        *ngFor="let task of pinned(); trackBy: trackById"
+        [task]="task"
+        (toggleDone)="toggleDone(task.id)"
+        (togglePin)="togglePin(task.id)"
+        (decompose)="decompose(task.id)"
+        (planify)="openPlanify(task.id)"
+        (remove)="remove(task.id)"
+      ></app-task-item>
+    </section>
+
+    <section class="tasks__section">
+      <h2>À faire</h2>
+      <div class="tasks__empty" *ngIf="!inbox().length">Aucune tâche pour le moment.</div>
+      <app-task-item
+        *ngFor="let task of inbox(); trackBy: trackById"
+        [task]="task"
+        (toggleDone)="toggleDone(task.id)"
+        (togglePin)="togglePin(task.id)"
+        (decompose)="decompose(task.id)"
+        (planify)="openPlanify(task.id)"
+        (remove)="remove(task.id)"
+      ></app-task-item>
+    </section>
+
+    <section *ngIf="hasCompleted()" class="tasks__section">
+      <h2>Terminées</h2>
+      <app-task-item
+        *ngFor="let task of completed(); trackBy: trackById"
+        [task]="task"
+        (toggleDone)="toggleDone(task.id)"
+        (togglePin)="togglePin(task.id)"
+        (decompose)="decompose(task.id)"
+        (planify)="openPlanify(task.id)"
+        (remove)="remove(task.id)"
+      ></app-task-item>
+    </section>
+  </ng-template>
+
+  <app-planify-drawer
+    [plan]="planDrawer()"
+    (close)="closePlanify()"
+    (slotSelected)="exportIcs($event)"
+  ></app-planify-drawer>
+</section>

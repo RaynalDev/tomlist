@@ -1,0 +1,17 @@
+<div class="layout">
+  <main class="layout__content">
+    <router-outlet></router-outlet>
+  </main>
+
+  <nav class="layout__nav">
+    <a
+      *ngFor="let link of links()"
+      [routerLink]="link.path"
+      routerLinkActive="layout__nav-link--active"
+      class="layout__nav-link"
+    >
+      <span class="layout__nav-icon" aria-hidden="true">{{ link.icon }}</span>
+      <span>{{ link.label }}</span>
+    </a>
+  </nav>
+</div>

@@ -1,0 +1,27 @@
+<div class="task" [class.task--done]="task.done">
+  <label class="task__body">
+    <input
+      type="checkbox"
+      [checked]="task.done"
+      (change)="toggleDone.emit()"
+      aria-label="Marquer la tâche comme terminée"
+    />
+    <div class="task__content">
+      <div class="task__title">{{ task.title }}</div>
+      <div class="task__note" *ngIf="task.note">{{ task.note }}</div>
+    </div>
+  </label>
+  <div class="task__actions">
+    <button
+      type="button"
+      class="task__pin"
+      (click)="togglePin.emit()"
+      [attr.aria-label]="task.pinned ? 'Retirer l\'épingle' : 'Épingler la tâche'"
+    >
+      {{ task.pinned ? '★' : '☆' }}
+    </button>
+    <button type="button" (click)="onPlanify()">Planifier</button>
+    <button type="button" (click)="onDecompose()">Décomposer</button>
+    <button type="button" class="task__delete" (click)="onRemove()">Supprimer</button>
+  </div>
+</div>

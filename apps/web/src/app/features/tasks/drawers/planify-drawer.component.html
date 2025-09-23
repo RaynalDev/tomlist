@@ -1,0 +1,32 @@
+<div class="drawer" *ngIf="plan as current">
+  <div class="drawer__backdrop" (click)="close.emit()"></div>
+  <aside class="drawer__panel">
+    <header class="drawer__header">
+      <h2>Planifier la tâche</h2>
+      <button type="button" (click)="close.emit()" aria-label="Fermer">✕</button>
+    </header>
+
+    <div class="drawer__body" *ngIf="!current.isLoading; else loading">
+      <p class="drawer__hint" *ngIf="!current.options.length">
+        Aucun créneau disponible pour le moment.
+      </p>
+      <ul class="drawer__options">
+        <li *ngFor="let option of current.options; trackBy: trackOption">
+          <div class="drawer__slot">
+            <div>
+              <div class="drawer__slot-range">{{ option.start | date:'short' }} → {{ option.end | date:'short' }}</div>
+              <div class="drawer__slot-score">Score {{ option.score }}</div>
+            </div>
+            <button type="button" (click)="slotSelected.emit(option)">
+              Exporter (.ics)
+            </button>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <ng-template #loading>
+      <div class="drawer__loading">Chargement des créneaux…</div>
+    </ng-template>
+  </aside>
+</div>

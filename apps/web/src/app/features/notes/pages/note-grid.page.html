@@ -1,0 +1,46 @@
+<section class="notes">
+  <header class="notes__header">
+    <h1>Listes & notes</h1>
+    <form class="notes__form" (ngSubmit)="add()">
+      <div class="notes__toggle">
+        <button
+          type="button"
+          [class.notes__toggle-button--active]="mode() === 'note'"
+          (click)="switchMode('note')"
+        >
+          Note
+        </button>
+        <button
+          type="button"
+          [class.notes__toggle-button--active]="mode() === 'list'"
+          (click)="switchMode('list')"
+        >
+          Liste
+        </button>
+      </div>
+      <input
+        type="text"
+        name="noteTitle"
+        [(ngModel)]="newTitle"
+        [placeholder]="mode() === 'note' ? 'Nouvelle note' : 'Nouvelle liste'"
+      />
+      <button type="submit">Créer</button>
+    </form>
+  </header>
+
+  <div class="notes__loading" *ngIf="isLoading(); else list">
+    Chargement…
+  </div>
+
+  <ng-template #list>
+    <div class="notes__empty" *ngIf="!hasNotes()">Pas encore de note.</div>
+    <div class="notes__grid">
+      <app-note-card
+        *ngFor="let note of notes(); trackBy: trackById"
+        [note]="note"
+        (addItem)="addItem(note.id, $event)"
+        (toggleItem)="toggleItem(note.id, $event.item.id, $event.checked)"
+      ></app-note-card>
+    </div>
+  </ng-template>
+</section>
