@@ -1,6 +1,6 @@
 [build]
   command = "npx nx build web"
-  publish = "dist/apps/web"
+  publish = "dist/apps/web/browser"
 
 [[redirects]]
   from = "/*"
