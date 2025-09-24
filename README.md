@@ -36,3 +36,14 @@ Toutes les données sont stockées en mémoire (seedé via `InMemoryDatabase`). 
 - `npx nx build api` : bundle API Nest (webpack).
 
 Consulte `nx.json` et les `project.json` pour les cibles disponibles.
+
+## Déploiement backend sur Render
+- Configure le service via `render.yaml` (déploiement Blueprint) ou manuellement avec :
+  - Build command: `npm ci && npm run build:api`
+  - Start command: `npm run start:api`
+- Définis les variables d'environnement :
+  - `NODE_ENV=production`
+  - `NX_DAEMON=false`
+  - `CORS_ORIGINS` → URL de déploiement du front (ex. `https://tomlist.netlify.app`).
+- Le health check conseillé est `/api/tasks` (préconfiguré dans `render.yaml`).
+- Le backend écoute `PORT` fourni par Render et expose l'API sous `/api`.

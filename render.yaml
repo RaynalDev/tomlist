@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: tomlist-api
+    env: node
+    plan: free
+    buildCommand: npm ci && npm run build:api
+    startCommand: npm run start:api
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NX_DAEMON
+        value: false
+      - key: CORS_ORIGINS
+        value: https://tomlist.netlify.app
+    healthCheckPath: /api/tasks
+    autoDeploy: true

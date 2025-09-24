@@ -2,7 +2,10 @@
   "name": "@tomlist/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "build:api": "NX_DAEMON=false npx nx build api",
+    "start:api": "node dist/apps/api/main.js"
+  },
   "private": true,
   "dependencies": {
     "@angular/common": "~20.2.0",
