@@ -39,10 +39,10 @@ Consulte `nx.json` et les `project.json` pour les cibles disponibles.
 
 ## Déploiement backend sur Render
 - Configure le service via `render.yaml` (déploiement Blueprint) ou manuellement avec :
-  - Build command: `npm ci && npm run build:api`
+- Build command: `npm ci --include=dev && npm run build:api`
   - Start command: `npm run start:api`
 - Définis les variables d'environnement :
-  - `NODE_ENV=production`
+- `NODE_ENV=production` (Render installera quand même les devDependencies grâce à `--include=dev`)
   - `NX_DAEMON=false`
   - `CORS_ORIGINS` → URL de déploiement du front (ex. `https://tomlist.netlify.app`).
 - Le health check conseillé est `/api/tasks` (préconfiguré dans `render.yaml`).
