@@ -65,4 +65,32 @@ export class NoteStore {
       })
     );
   }
+
+  async reorder(order: string[]): Promise<void> {
+    if (order.length <= 1) {
+      return;
+    }
+    const notes = this.notes();
+    const orderSet = new Set(order);
+    const lookup = new Map(notes.map((note) => [note.id, note]));
+
+    const ordered: Note[] = [];
+    for (const id of order) {
+      const note = lookup.get(id);
+      if (note) {
+        ordered.push(note);
+        lookup.delete(id);
+      }
+    }
+
+    for (const note of notes) {
+      if (!orderSet.has(note.id)) {
+        ordered.push(note);
+      }
+    }
+
+    this.notesSignal.set(ordered);
+    await this.api.reorderNotes(ordered.map((note) => note.id));
+  }
+
 }

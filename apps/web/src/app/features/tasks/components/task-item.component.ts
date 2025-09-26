@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { Task } from '@tomlist/domain';
 
 @Component({
   selector: 'app-task-item',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, DragDropModule],
   templateUrl: './task-item.component.html',
   styleUrl: './task-item.component.scss',
 })

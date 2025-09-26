@@ -29,4 +29,8 @@ export class NotesService {
       throw new NotFoundException('List item not found');
     }
   }
+
+  reorder(ids: NoteId[]): Note[] {
+    return this.db.reorderNotes(ids);
+  }
 }

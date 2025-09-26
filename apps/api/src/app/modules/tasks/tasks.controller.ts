@@ -3,6 +3,7 @@ import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { InMemoryDatabase } from '../../database/in-memory.database';
+import { ReorderTasksDto } from './dto/reorder-tasks.dto';
 
 @Controller('tasks')
 export class TasksController {
@@ -38,5 +39,10 @@ export class TasksController {
   @Post(':id/decompose')
   decompose(@Param('id') id: string) {
     return this.tasks.decompose(id);
+  }
+
+  @Post('reorder')
+  reorder(@Body() body: ReorderTasksDto) {
+    return this.tasks.reorder(body.ids ?? []);
   }
 }

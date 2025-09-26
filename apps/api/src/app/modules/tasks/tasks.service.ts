@@ -53,4 +53,8 @@ export class TasksService {
     this.db.deleteTask(id);
     return { noteId: note.id };
   }
+
+  reorder(order: TaskId[]): Task[] {
+    return this.db.reorderTasks(order);
+  }
 }

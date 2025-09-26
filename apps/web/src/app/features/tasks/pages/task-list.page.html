@@ -1,52 +1,50 @@
 <section class="tasks">
   <header class="tasks__header">
-    <h1>Tâches</h1>
+    <h1>Mes Tâches</h1>
     <form class="tasks__form" (ngSubmit)="onSubmit()">
       <input
         type="text"
-        placeholder="Ajouter une tâche rapide"
+        placeholder="Ajouter une nouvelle tâche..."
         [(ngModel)]="newTask"
         name="taskTitle"
         required
       />
-      <button type="submit">Ajouter</button>
+      <button type="submit" aria-label="Ajouter la tâche">
+        <span aria-hidden="true">+</span>
+      </button>
     </form>
+    <p class="tasks__count">À faire ({{ todo().length }})</p>
   </header>
 
-  <div class="tasks__loading" *ngIf="isLoading(); else list">
-    Chargement…
-  </div>
+  <div class="tasks__loading" *ngIf="isLoading(); else list">Chargement…</div>
 
   <ng-template #list>
-    <section *ngIf="hasPinned()" class="tasks__section">
-      <h2>Tâches épinglées</h2>
-      <app-task-item
-        *ngFor="let task of pinned(); trackBy: trackById"
-        [task]="task"
-        (toggleDone)="toggleDone(task.id)"
-        (togglePin)="togglePin(task.id)"
-        (decompose)="decompose(task.id)"
-        (planify)="openPlanify(task.id)"
-        (remove)="remove(task.id)"
-      ></app-task-item>
-    </section>
+    <div
+      class="tasks__dropzone"
+      cdkDropList
+      (cdkDropListDropped)="onDrop($event)"
+    >
+      <p class="tasks__empty" *ngIf="!todo().length">
+        Aucune tâche pour le moment.
+      </p>
+      <div
+        class="tasks__drag-item"
+        *ngFor="let task of todo(); trackBy: trackById"
+        cdkDrag
+      >
+        <app-task-item
+          [task]="task"
+          (toggleDone)="toggleDone(task.id)"
+          (togglePin)="togglePin(task.id)"
+          (decompose)="decompose(task.id)"
+          (planify)="openPlanify(task.id)"
+          (remove)="remove(task.id)"
+        ></app-task-item>
+      </div>
+    </div>
 
-    <section class="tasks__section">
-      <h2>À faire</h2>
-      <div class="tasks__empty" *ngIf="!inbox().length">Aucune tâche pour le moment.</div>
-      <app-task-item
-        *ngFor="let task of inbox(); trackBy: trackById"
-        [task]="task"
-        (toggleDone)="toggleDone(task.id)"
-        (togglePin)="togglePin(task.id)"
-        (decompose)="decompose(task.id)"
-        (planify)="openPlanify(task.id)"
-        (remove)="remove(task.id)"
-      ></app-task-item>
-    </section>
-
-    <section *ngIf="hasCompleted()" class="tasks__section">
-      <h2>Terminées</h2>
+    <section *ngIf="completed().length" class="tasks__section tasks__section--completed">
+      <h2>Tâches terminées</h2>
       <app-task-item
         *ngFor="let task of completed(); trackBy: trackById"
         [task]="task"

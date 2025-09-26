@@ -1,4 +1,13 @@
 <div class="task" [class.task--done]="task.done">
+  <button
+    type="button"
+    class="task__drag"
+    cdkDragHandle
+    aria-label="Réordonner la tâche"
+  >
+    ⋮⋮
+  </button>
+
   <label class="task__body">
     <input
       type="checkbox"
@@ -11,17 +20,39 @@
       <div class="task__note" *ngIf="task.note">{{ task.note }}</div>
     </div>
   </label>
+
   <div class="task__actions">
     <button
       type="button"
-      class="task__pin"
+      class="task__action task__action--pin"
       (click)="togglePin.emit()"
       [attr.aria-label]="task.pinned ? 'Retirer l\'épingle' : 'Épingler la tâche'"
     >
-      {{ task.pinned ? '★' : '☆' }}
+      <span aria-hidden="true">{{ task.pinned ? '★' : '☆' }}</span>
     </button>
-    <button type="button" (click)="onPlanify()">Planifier</button>
-    <button type="button" (click)="onDecompose()">Décomposer</button>
-    <button type="button" class="task__delete" (click)="onRemove()">Supprimer</button>
+    <button
+      type="button"
+      class="task__action"
+      (click)="onPlanify()"
+      aria-label="Planifier la tâche"
+    >
+      <span aria-hidden="true">🗓</span>
+    </button>
+    <button
+      type="button"
+      class="task__action"
+      (click)="onDecompose()"
+      aria-label="Décomposer la tâche"
+    >
+      <span aria-hidden="true">⧉</span>
+    </button>
+    <button
+      type="button"
+      class="task__delete"
+      (click)="onRemove()"
+      aria-label="Supprimer la tâche"
+    >
+      <span aria-hidden="true">🗑</span>
+    </button>
   </div>
 </div>
