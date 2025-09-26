@@ -4,6 +4,7 @@ import { CreateNoteDto } from './dto/create-note.dto';
 import { CreateItemDto } from './dto/create-item.dto';
 import { ToggleItemDto } from './dto/toggle-item.dto';
 import { InMemoryDatabase } from '../../database/in-memory.database';
+import { ReorderNotesDto } from './dto/reorder-notes.dto';
 
 @Controller('notes')
 export class NotesController {
@@ -15,6 +16,11 @@ export class NotesController {
   @Get()
   findAll() {
     return this.notes.list();
+  }
+
+  @Post('reorder')
+  reorder(@Body() body: ReorderNotesDto) {
+    return this.notes.reorder(body.ids ?? []);
   }
 
   @Post()

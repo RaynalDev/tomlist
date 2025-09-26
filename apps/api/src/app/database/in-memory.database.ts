@@ -76,6 +76,31 @@ export class InMemoryDatabase {
     this.data.tasks = this.data.tasks.filter((task) => !set.has(task.id));
   }
 
+  reorderTasks(order: TaskId[]): Task[] {
+    const current = new Map(this.data.tasks.map((task) => [task.id, task]));
+    const seen = new Set<TaskId>();
+    const next: Task[] = [];
+
+    for (const id of order) {
+      const task = current.get(id);
+      if (!task || seen.has(id)) {
+        continue;
+      }
+      next.push(task);
+      seen.add(id);
+    }
+
+    for (const task of this.data.tasks) {
+      if (seen.has(task.id)) {
+        continue;
+      }
+      next.push(task);
+    }
+
+    this.data.tasks = next;
+    return this.listTasks();
+  }
+
   listNotes(): Note[] {
     return [...this.data.notes];
   }
@@ -147,6 +172,31 @@ export class InMemoryDatabase {
     note.items[index] = next;
     this.updateNote(note);
     return next;
+  }
+
+  reorderNotes(order: NoteId[]): Note[] {
+    const current = new Map(this.data.notes.map((note) => [note.id, note]));
+    const seen = new Set<NoteId>();
+    const next: Note[] = [];
+
+    for (const id of order) {
+      const note = current.get(id);
+      if (!note || seen.has(id)) {
+        continue;
+      }
+      next.push(note);
+      seen.add(id);
+    }
+
+    for (const note of this.data.notes) {
+      if (seen.has(note.id)) {
+        continue;
+      }
+      next.push(note);
+    }
+
+    this.data.notes = next;
+    return this.listNotes();
   }
 
   private getListNote(noteId: NoteId): ListNote {

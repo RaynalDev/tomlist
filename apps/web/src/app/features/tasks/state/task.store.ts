@@ -23,12 +23,6 @@ export class TaskStore {
   readonly tasks: Signal<Task[]> = this.tasksSignal.asReadonly();
   readonly isLoading = this.loading.asReadonly();
   readonly planDrawer = this.planSignal.asReadonly();
-  readonly pinned = computed(() =>
-    this.tasks().filter((task) => task.pinned && !task.done)
-  );
-  readonly inbox = computed(() =>
-    this.tasks().filter((task) => !task.pinned && !task.done)
-  );
   readonly completed = computed(() =>
     this.tasks().filter((task) => task.done)
   );
@@ -80,6 +74,37 @@ export class TaskStore {
   async remove(id: TaskId): Promise<void> {
     await this.api.deleteTask(id);
     this.tasksSignal.update((tasks) => tasks.filter((task) => task.id !== id));
+  }
+
+  async reorder(order: TaskId[]): Promise<void> {
+    if (order.length <= 1) {
+      return;
+    }
+    const tasks = this.tasks();
+    const active = tasks.filter((task) => !task.done);
+    const done = tasks.filter((task) => task.done);
+
+    const orderSet = new Set(order);
+    const activeMap = new Map(active.map((task) => [task.id, task]));
+
+    const orderedActive: Task[] = [];
+    for (const id of order) {
+      const task = activeMap.get(id);
+      if (task) {
+        orderedActive.push(task);
+        activeMap.delete(id);
+      }
+    }
+
+    for (const task of active) {
+      if (!orderSet.has(task.id)) {
+        orderedActive.push(task);
+      }
+    }
+
+    const next = [...orderedActive, ...done];
+    this.tasksSignal.set(next);
+    await this.api.reorderTasks(next.map((task) => task.id));
   }
 
   async decompose(id: TaskId): Promise<void> {

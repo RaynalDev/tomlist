@@ -2,8 +2,8 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  padding: 1.5rem 1rem 5.5rem;
-  max-width: 720px;
+  padding: 2rem 1.25rem 6rem;
+  max-width: 760px;
   margin: 0 auto;
 }
 
@@ -16,61 +16,104 @@
 .tasks__header h1 {
   font-size: 2rem;
   font-weight: 700;
+  color: #111827;
 }
 
 .tasks__form {
   display: flex;
+  align-items: center;
   gap: 0.75rem;
+  background: #f3f4f6;
+  border-radius: 1rem;
+  padding: 0.4rem 0.4rem 0.4rem 1rem;
 }
 
 .tasks__form input {
   flex: 1;
-  border: 1px solid #d1d5db;
-  border-radius: 0.75rem;
-  padding: 0.75rem 1rem;
-  background: #f9fafb;
+  border: none;
+  background: transparent;
+  font-size: 1rem;
+  color: #111827;
+}
+
+.tasks__form input:focus {
+  outline: none;
 }
 
 .tasks__form button {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 0.9rem;
   border: none;
-  background: #2563eb;
-  color: white;
-  padding: 0.75rem 1.25rem;
-  border-radius: 0.75rem;
-  font-weight: 600;
+  background: #111827;
+  color: #fff;
+  font-size: 1.6rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
 }
 
 .tasks__form button:hover {
-  background: #1d4ed8;
+  background: #1f2937;
 }
 
-.tasks__section {
+.tasks__count {
+  font-size: 0.95rem;
+  color: #6b7280;
+}
+
+.tasks__dropzone {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+  min-height: 4rem;
 }
 
-.tasks__section h2 {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #4b5563;
+.tasks__drag-item.cdk-drag-placeholder {
+  opacity: 0.4;
 }
 
 .tasks__empty {
+  padding: 1rem;
+  border-radius: 0.9rem;
+  background: #f9fafb;
   color: #9ca3af;
+  text-align: center;
 }
 
 .tasks__loading {
   color: #6b7280;
 }
 
+.tasks__section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.tasks__section h2 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.tasks__section--completed app-task-item {
+  opacity: 0.85;
+}
+
 @media (max-width: 640px) {
+  .tasks {
+    padding: 1.5rem 1rem 5rem;
+  }
+
   .tasks__form {
-    flex-direction: column;
+    padding-right: 0.25rem;
   }
 
   .tasks__form button {
-    width: 100%;
+    width: 2.5rem;
+    height: 2.5rem;
   }
 }

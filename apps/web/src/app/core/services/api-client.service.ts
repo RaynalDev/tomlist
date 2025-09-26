@@ -39,6 +39,12 @@ export class ApiClientService {
     ).then(() => undefined);
   }
 
+  reorderTasks(ids: TaskId[]): Promise<Task[]> {
+    return firstValueFrom(
+      this.http.post<Task[]>(`${this.baseUrl}/tasks/reorder`, { ids })
+    );
+  }
+
   decomposeTask(id: TaskId): Promise<DecomposeResponse> {
     return firstValueFrom(
       this.http.post<DecomposeResponse>(`${this.baseUrl}/tasks/${id}/decompose`, {})
@@ -51,6 +57,12 @@ export class ApiClientService {
 
   createNote(payload: { type: 'note' | 'list'; title: string }): Promise<Note> {
     return firstValueFrom(this.http.post<Note>(`${this.baseUrl}/notes`, payload));
+  }
+
+  reorderNotes(ids: string[]): Promise<Note[]> {
+    return firstValueFrom(
+      this.http.post<Note[]>(`${this.baseUrl}/notes/reorder`, { ids })
+    );
   }
 
   createListItem(noteId: string, label: string): Promise<ListItem> {

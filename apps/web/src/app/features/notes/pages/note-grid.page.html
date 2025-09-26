@@ -1,46 +1,58 @@
 <section class="notes">
   <header class="notes__header">
-    <h1>Listes & notes</h1>
+    <h1>Notes &amp; Listes</h1>
     <form class="notes__form" (ngSubmit)="add()">
-      <div class="notes__toggle">
+      <div class="notes__input">
+        <input
+          type="text"
+          name="noteTitle"
+          [(ngModel)]="newTitle"
+          [placeholder]="isListMode() ? 'Cliquez ici pour nommer la liste...' : 'Cliquez ici pour créer une note...'"
+        />
         <button
           type="button"
-          [class.notes__toggle-button--active]="mode() === 'note'"
-          (click)="switchMode('note')"
+          class="notes__toggle"
+          (click)="toggleMode()"
+          [attr.aria-pressed]="isListMode()"
+          [attr.aria-label]="isListMode() ? 'Créer une note' : 'Créer une liste'"
         >
-          Note
-        </button>
-        <button
-          type="button"
-          [class.notes__toggle-button--active]="mode() === 'list'"
-          (click)="switchMode('list')"
-        >
-          Liste
+          <span aria-hidden="true">☑</span>
         </button>
       </div>
-      <input
-        type="text"
-        name="noteTitle"
-        [(ngModel)]="newTitle"
-        [placeholder]="mode() === 'note' ? 'Nouvelle note' : 'Nouvelle liste'"
-      />
-      <button type="submit">Créer</button>
+      <p class="notes__hint">
+        Cliquez dans le champ pour créer une note • Cliquez sur ☑ pour créer une liste
+      </p>
     </form>
   </header>
 
-  <div class="notes__loading" *ngIf="isLoading(); else list">
-    Chargement…
-  </div>
+  <div class="notes__loading" *ngIf="isLoading(); else list">Chargement…</div>
 
   <ng-template #list>
-    <div class="notes__empty" *ngIf="!hasNotes()">Pas encore de note.</div>
-    <div class="notes__grid">
-      <app-note-card
+    <div
+      class="notes__grid"
+      cdkDropList
+      (cdkDropListDropped)="onDrop($event)"
+    >
+      <p class="notes__empty" *ngIf="!hasNotes()">Pas encore de note.</p>
+      <div
+        class="notes__card"
         *ngFor="let note of notes(); trackBy: trackById"
-        [note]="note"
-        (addItem)="addItem(note.id, $event)"
-        (toggleItem)="toggleItem(note.id, $event.item.id, $event.checked)"
-      ></app-note-card>
+        cdkDrag
+      >
+        <button
+          type="button"
+          class="notes__card-handle"
+          cdkDragHandle
+          aria-label="Réordonner la note"
+        >
+          ⋮⋮
+        </button>
+        <app-note-card
+          [note]="note"
+          (addItem)="addItem(note.id, $event)"
+          (toggleItem)="toggleItem(note.id, $event.item.id, $event.checked)"
+        ></app-note-card>
+      </div>
     </div>
   </ng-template>
 </section>

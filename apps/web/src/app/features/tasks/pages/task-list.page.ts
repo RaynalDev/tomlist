@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { DragDropModule, CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { TaskStore } from '../state/task.store';
 import { TaskItemComponent } from '../components/task-item.component';
 import { PlanifyDrawerComponent } from '../drawers/planify-drawer.component';
@@ -8,7 +9,7 @@ import { PlanifyDrawerComponent } from '../drawers/planify-drawer.component';
 @Component({
   selector: 'app-task-list-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, TaskItemComponent, PlanifyDrawerComponent],
+  imports: [CommonModule, FormsModule, DragDropModule, TaskItemComponent, PlanifyDrawerComponent],
   templateUrl: './task-list.page.html',
   styleUrl: './task-list.page.scss',
 })
@@ -16,11 +17,10 @@ export class TaskListPage {
   private readonly store = inject(TaskStore);
 
   readonly tasks = this.store.tasks;
-  readonly pinned = this.store.pinned;
-  readonly inbox = this.store.inbox;
   readonly completed = this.store.completed;
   readonly planDrawer = this.store.planDrawer;
   readonly isLoading = this.store.isLoading;
+  readonly todo = computed(() => this.tasks().filter((task) => !task.done));
 
   private readonly newTaskSignal = signal('');
 
@@ -32,8 +32,6 @@ export class TaskListPage {
     this.newTaskSignal.set(value);
   }
 
-  readonly hasPinned = computed(() => this.pinned().length > 0);
-  readonly hasCompleted = computed(() => this.completed().length > 0);
 
   async onSubmit(): Promise<void> {
     const title = this.newTask.trim();
@@ -42,6 +40,15 @@ export class TaskListPage {
     }
     await this.store.add(title);
     this.newTask = '';
+  }
+
+  async onDrop(event: CdkDragDrop<unknown>): Promise<void> {
+    if (event.previousIndex === event.currentIndex) {
+      return;
+    }
+    const current = [...this.todo()];
+    moveItemInArray(current, event.previousIndex, event.currentIndex);
+    await this.store.reorder(current.map((task) => task.id));
   }
 
   trackById(_: number, item: { id: string }): string {
