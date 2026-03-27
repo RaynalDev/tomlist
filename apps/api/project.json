@@ -60,6 +60,34 @@
           "buildTarget": "api:build:production"
         }
       }
+    },
+    "prisma-generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx prisma generate --schema prisma/schema.prisma",
+        "cwd": "apps/api"
+      }
+    },
+    "prisma-migrate-dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx prisma migrate dev --schema prisma/schema.prisma",
+        "cwd": "apps/api"
+      }
+    },
+    "prisma-migrate-deploy": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx prisma migrate deploy --schema prisma/schema.prisma",
+        "cwd": "apps/api"
+      }
+    },
+    "prisma-studio": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx prisma studio --schema prisma/schema.prisma",
+        "cwd": "apps/api"
+      }
     }
   },
   "tags": []
